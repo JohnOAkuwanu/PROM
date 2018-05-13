@@ -96,6 +96,29 @@ def GUI():
 
 #def togglePWM():
 #def toggleServo():
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BOARD)
+
+GPIO.setup(10,GPIO.OUT)
+
+p = GPIO.PWM(10,50)
+p.start(7.5)
+
+try:
+        while True:
+                p.ChangeDutyCycle(7.5)
+                time.sleep(1)
+                p.ChangeDutyCycle(12.5)
+                time.sleep(1)
+                p.ChangeDutyCycle(2.5)
+                time.sleep(1)
+
+
+except KeyboardInterrupt:
+        GPIO.cleanup
+#
     
 def log(type, now):
     print(type + ": Bug detected - " + now.strftime("%H:%M:%S %d/%m/%y"))
@@ -111,3 +134,16 @@ detector.add_argument() #microphone
 detector.add_argument() #gui
 
 imageDetection("./images/image3.jpg")
+
+# 
+I2C_YEL_LED = 0x38
+LED_ON = 0x00
+LED_OFF =0xFF
+
+bus = smbus.SMBus(1)
+
+bus.write_byte( I2C_YEL_LED, LED_ON )
+time.sleep(1)
+bus.write_byte( I2C_YEL_LED, LED_OFF )
+time.sleep(1)
+#
